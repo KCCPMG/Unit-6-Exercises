@@ -1,0 +1,254 @@
+1. What git command creates a branch?
+
+git checkout -b <branchname>
+
+2. What is the difference between a fast-forward and recursive merge?
+
+A fast-forward merge will put one set of commits on top of another chronologically, if the commit history allows for it. If it does not and commits were done on both of the merging branches since the creation of the newer branch, a recursive merge will take place.
+
+3. What git command changes to another branch?
+
+git checkout
+
+4. What git command deletes a branch?
+
+git branch -d <branchname>
+git branch -D <branchname> if the branch was not merged
+
+5. How do merge conflicts happen?
+
+Merge conflicts happen when commits were made to the same file on different branches that are about to be merged. For example:
+
+init with "main" branch
+create file "readme.md"
+add "readme.md"
+make initial commit
+create new branch "experiment"
+change "readme.md" in "experiment"
+switch to "main" branch
+change "readme.md" in "main"
+from "main", merge "experiment" into "main"
+
+Part 2
+
+Practice with fast forward and recursive merges! Make a branch and add and commit onto it and merge it back into master.
+
+Try to create your own merge conflict by modifying the same file on two separate commits on two separate branches.
+
+
+
+From Git Bash:
+
+~Unit 6 Exercises/merge_conflict_practice (main)
+$ git init
+Initialized empty Git repository in C:/Users/Connor/Desktop/Code/Springboard Playground/Unit 6 Exercises/merge_conflict_practice/.git/
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ touch readme.md
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        readme.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git add .
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   readme.md
+
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git commit -m "initial commit"
+[master (root-commit) ba05e59] initial commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 readme.md
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git checkout -b "trouble_branch"
+Switched to a new branch 'trouble_branch'
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git branch
+  master
+* trouble_branch
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git checkout master
+Switched to branch 'master'
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ echo "test" > readme.md
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ cat readme.md
+test
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   readme.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git add readme.md
+warning: LF will be replaced by CRLF in readme.md.
+The file will have its original line endings in your working directory
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   readme.md
+
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git commit -m "edit to readme.md"
+[master 62f5b75] edit to readme.md
+ 1 file changed, 1 insertion(+)
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git branch
+* master
+  trouble_branch
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git checkout trouble_branch
+Switched to branch 'trouble_branch'
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git status
+On branch trouble_branch
+nothing to commit, working tree clean
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ echo "TEST TEST TEST" > readme.md
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ cat readme.md
+TEST TEST TEST
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git status
+On branch trouble_branch
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   readme.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git add readme.md
+warning: LF will be replaced by CRLF in readme.md.
+The file will have its original line endings in your working directory
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git status
+On branch trouble_branch
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   readme.md
+
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git commit -m "Edited readme.md"
+[trouble_branch 9110b45] Edited readme.md
+ 1 file changed, 1 insertion(+)
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git status
+On branch trouble_branch
+nothing to commit, working tree clean
+
+~Unit 6 Exercises/merge_conflict_practice (trouble_branch)
+$ git checkout master
+Switched to branch 'master'
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ cat readme.md
+test
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git branch
+* master
+  trouble_branch
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git merge trouble_branch
+Auto-merging readme.md
+CONFLICT (content): Merge conflict in readme.md
+Automatic merge failed; fix conflicts and then commit the result.
+
+(Resolving conflict in VS code to accept incoming changes)
+
+~Unit 6 Exercises/merge_conflict_practice (master|MERGING)
+$ git status
+On branch master
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   readme.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+~Unit 6 Exercises/merge_conflict_practice (master|MERGING)
+$ git add readme.md
+
+~Unit 6 Exercises/merge_conflict_practice (master|MERGING)
+$ git status
+On branch master
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        modified:   readme.md
+
+
+~Unit 6 Exercises/merge_conflict_practice (master|MERGING)
+$ git commit -m "resolve merge conflict merge trouble_branch into master"
+[master ed81889] resolve merge conflict merge trouble_branch into master
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ cat readme.md
+TEST TEST TEST
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git branch -d trouble_branch
+Deleted branch trouble_branch (was 9110b45).
+
+~Unit 6 Exercises/merge_conflict_practice (master)
+$ git branch
+* master
